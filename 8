@@ -1,0 +1,221 @@
+/*Design, Develop and Implement a menu driven Program in C for the following
+operations on Circular Singly Linked List (CSLL) for data of integers.
+• Create a CSLL of data using front insertion.
+• Perform Insertion and Deletion to the right of the given node.
+• Perform Insertion and Deletion at end of CSLL.
+-Display the status of CSLL and count the number of nodes in it.
+• Exit*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *last = NULL;   // Points to the last node (useful for CSLL operations)
+
+// Function to create CSLL using front insertion
+void insertFront(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+
+    if (last == NULL) {
+        last = newNode;
+        last->next = last;  // Circular link
+    } else {
+        newNode->next = last->next;
+        last->next = newNode;
+    }
+
+    printf("Inserted %d at front.\n", value);
+}
+
+// Function to display CSLL and count nodes
+void displayList() {
+    if (last == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node *temp = last->next;
+    int count = 0;
+
+    printf("\nCircular Singly Linked List Elements:\n");
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+        count++;
+    } while (temp != last->next);
+
+    printf("(back to head)\nTotal nodes = %d\n", count);
+}
+
+// Function to insert to the right of a given node
+void insertRight(int key, int value) {
+    if (last == NULL) {
+        printf("List is empty. Insertion not possible.\n");
+        return;
+    }
+
+    struct Node *temp = last->next;
+    do {
+        if (temp->data == key) {
+            struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+            newNode->data = value;
+            newNode->next = temp->next;
+            temp->next = newNode;
+
+            if (temp == last)
+                last = newNode;
+
+            printf("Inserted %d to the right of %d.\n", value, key);
+            return;
+        }
+        temp = temp->next;
+    } while (temp != last->next);
+
+    printf("Key %d not found.\n", key);
+}
+
+// Function to delete node to the right of a given node
+void deleteRight(int key) {
+    if (last == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node *temp = last->next;
+    do {
+        if (temp->data == key) {
+            struct Node *delNode = temp->next;
+
+            // If only one node
+            if (delNode == temp) {
+                printf("Only one node, cannot delete right of it.\n");
+                return;
+            }
+
+            temp->next = delNode->next;
+
+            if (delNode == last)
+                last = temp; // Update last if deleting last node
+
+            printf("Deleted node with data %d to the right of %d.\n", delNode->data, key);
+            free(delNode);
+            return;
+        }
+        temp = temp->next;
+    } while (temp != last->next);
+
+    printf("Key %d not found.\n", key);
+}
+
+// Function to insert at end of CSLL
+void insertEnd(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+
+    if (last == NULL) {
+        last = newNode;
+        last->next = last;
+    } else {
+        newNode->next = last->next;
+        last->next = newNode;
+        last = newNode;
+    }
+
+    printf("Inserted %d at end.\n", value);
+}
+
+// Function to delete at end of CSLL
+void deleteEnd() {
+    if (last == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node *temp = last->next;
+
+    // Only one node
+    if (last->next == last) {
+        printf("Deleted node with data %d.\n", last->data);
+        free(last);
+        last = NULL;
+        return;
+    }
+
+    // Traverse to node before last
+    while (temp->next != last)
+        temp = temp->next;
+
+    printf("Deleted node with data %d from end.\n", last->data);
+    temp->next = last->next;
+    free(last);
+    last = temp;
+}
+
+// Main function — menu driven
+int main() {
+    int choice, value, key;
+
+    do {
+        printf("\n========== MENU ==========\n");
+        printf("1. Create CSLL using Front Insertion\n");
+        printf("2. Insert to Right of Given Node\n");
+        printf("3. Delete to Right of Given Node\n");
+        printf("4. Insert at End\n");
+        printf("5. Delete at End\n");
+        printf("6. Display CSLL and Count Nodes\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert at front: ");
+                scanf("%d", &value);
+                insertFront(value);
+                break;
+
+            case 2:
+                printf("Enter key node value: ");
+                scanf("%d", &key);
+                printf("Enter value to insert to the right: ");
+                scanf("%d", &value);
+                insertRight(key, value);
+                break;
+
+            case 3:
+                printf("Enter key node value to delete its right: ");
+                scanf("%d", &key);
+                deleteRight(key);
+                break;
+
+            case 4:
+                printf("Enter value to insert at end: ");
+                scanf("%d", &value);
+                insertEnd(value);
+                break;
+
+            case 5:
+                deleteEnd();
+                break;
+
+            case 6:
+                displayList();
+                break;
+
+            case 7:
+                printf("Exiting program...\n");
+                break;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
