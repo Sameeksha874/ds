@@ -1,0 +1,199 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int a[10], pos, elem;
+int n = 0;
+
+// Function declarations
+void create();
+void display();
+void insert();
+void del();
+
+void main() {
+    int choice;
+
+    while (1) {
+        printf("\n\n--- MENU ---");
+        printf("\n1. Create an array of N integers");
+        printf("\n2. Display of array elements");
+        printf("\n3. Insert ELEM at a given POS");
+        printf("\n4. Delete element from a given POS");
+        printf("\n5. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: create(); break;
+            case 2: display(); break;
+            case 3: insert(); break;
+            case 4: del(); break;
+            case 5: exit(1);
+            default: printf("\nPlease enter a valid choice.");
+        }
+    }
+}
+
+// Function to create array
+void create() {
+    int i;
+    printf("\nEnter the number of elements: ");
+    scanf("%d", &n);
+
+    printf("\nEnter the elements: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+}
+
+// Function to display array
+void display() {
+    int i;
+    if (n == 0) {
+        printf("\nNo elements to display.");
+        return;
+    }
+
+    printf("\nArray elements are:");
+    for (i = 0; i < n; i++) 
+        printf("%d\t", a[i]);
+}
+
+// Function to insert element
+void insert() {
+    int i;
+    if (n == 5) {   //Since arr[MAX] = 10 but ma'am told to take MAX=5 here.
+        printf("\nArray is full. Insertion not possible.");
+        return;
+    }
+
+    do {
+        printf("\nEnter a valid position where element to be inserted: ");
+        scanf("%d" , &pos);
+    }
+
+    while (pos > n);
+    printf("\nEnter the element to insert: ");
+    scanf("%d", &elem);
+
+    for (i = n - 1; i >= pos; i--) {
+        a[i + 1] = a[i];
+    }
+
+    a[pos] = elem;
+    n = n+1;   //n++
+    display();
+}
+
+// Function to delete element
+void del() {
+    int i;
+    if (n == 0) {
+        printf("\nArray is empty. Deletion not possible.");
+        return;
+    }
+
+    do {
+        printf("\nEnter a valid position from where element to be deleted: ");
+        scanf("%d", &pos);
+    }
+
+    while (pos >= n);
+    elem = a[pos];
+    printf("\nDeleted element is: %d\n", elem);
+
+    for (i = pos; i < n - 1; i++) {
+        a[i] = a[i + 1];
+    }
+
+    n = n-1;    //n--;
+    display();
+}
+ 1b
+
+
+      #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define N 5
+#define M 3
+
+struct Student{
+int rollNo;
+char name[50];
+int semester;
+int marks[M]
+};
+
+void enterDetails(struct Student *s);
+void displayDetails (struct Student *s);
+void studentWiseTotal(struct Student *s);
+void subjectWiseTotal (struct Student *s);
+
+int main(){
+    struct Student students[N];
+    struct Student *ptr=students;
+
+    printf("Enter the details of %d students:\n",N);
+    enterDetails(ptr);
+
+    printf("StudentDetails:\n");
+    displayDetails(ptr);
+    printf("StudentWiseTotalMarks:\n");
+    studentWiseTotal(ptr);
+    printf("SubjectWiseTotalMarks:\n");
+    subjectWiseTotal(ptr);
+    return 0;
+}
+
+void enterDetails(struct Student *s){
+    for(int i=0;i<N;i++){
+        printf("\nEnter details of students %d:\n",i+1);
+        printf("RollNo.:");
+        scanf("%d",&(s+i)->rollNo);
+        printf("Name:");
+        scanf("%s",&(s+i)->name);
+        printf("Semester:");
+        scanf("%d",&(s+i)->semester);
+        for (int j=0;j<M;j++){
+            printf("Marks in Subject %d:", j+1);
+            scanf("%d",&((s+i)->marks[j]));
+        }
+
+    }
+
+}
+
+void displayDetails(struct Student *s){
+    for (int i=0; i<N;i++){
+        printf("\nRollNo.:%d",(s+i)->rollNo);
+        printf("\nName: %s", (s+i)->name);
+        printf("\nSemester:%d",(s+i)->semester);
+        printf("\nMarks:");
+        for (int j=0; j<M; j++){
+            printf("%d",(s+i)->marks[j]);
+        }
+        printf("\n");
+    }
+
+}
+
+void studentWiseTotal(struct Student *s){
+    for (int i=0; i<N ;i++){
+        int total =0;
+        for (int j=0;j<M;j++){
+            total += (s+i)->marks[j];
+        }
+        printf("Total marks of %s (RollNo %d): %d\n", (s+i)->name, (s+i)->rollNo,total);
+    }
+}
+
+void subjectWiseTotal(struct Student *s){
+    for (int j=0; j<M; j++){
+        int total =0;
+        for (int i=0;i<N;i++){
+            total+= (s+i)->marks[j];
+        }
+        printf("Total marks in subject %d :%d\n",j+1, total);
+    }
+}
