@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 5
+struct Stack{
+    int arr[MAX];
+    int top;
+};
+void push(struct Stack *s, int item);
+int pop(struct Stack *s);
+void display(struct Stack *s);
+int main()
+{
+    struct Stack s;
+    s.top=-1;
+    int choice, item;
+    while(1){
+        printf("\n--STACK MENU--\n");
+        printf("1.Push\n");
+        printf("2.Pop\n");
+        printf("3.Display\n");
+        printf("4.Exit\n");
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+
+        switch(choice){
+        case 1:
+            printf("Enter the element to push:");
+            scanf("%d",&item);
+            push(&s,item);
+            break;
+        case 2:
+            item=pop(&s);
+            if(item!=-1){
+                printf("Popped Element: %d\n", item);
+            }
+            break;
+        case 3:
+            display(&s);
+            break;
+        case 4:
+            exit(0);
+        default:
+            printf("Invalid Choice! Try Again.\n");
+        }
+    }
+    return 0;
+}
+
+void push(struct Stack *s, int item){
+    if(s->top==MAX-1){
+        printf("Stack Overflow! Cannot push %d\n",item);
+    }else{
+        s->top++;
+        s->arr[s->top]=item;
+        printf("%d pushed onto stack.\n",item);
+    }
+}
+int pop(struct Stack *s){
+    if(s->top==-1){
+        printf("Stack Undderflow! Nothing to pop.\n");
+        return -1;
+    }else{
+        int item=s->arr[s->top];
+        s->top--;
+        return item;
+    }
+}
+void display(struct Stack *s){
+    if(s->top==-1){
+        printf("Stack is empty.\n");
+    }else{
+        printf("Stack elements(top to bottom):\n");
+        for(int i=s->top;i>=0;i--){
+            printf("%d\n",s->arr[i]);
+        }
+    }
+}
