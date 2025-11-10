@@ -1,0 +1,203 @@
+/*Design, Develop and Implement a menu driven Program in C for the following
+operations on Singly Linked List (SLL) for data of integers.
+• Create a SLL of Data using front insertion.
+• Display the status of SLL and count the number of nodes in it.
+• Demonstration of stack
+• Demonstration of Queue
+• Exit*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+// Function to insert node at front
+void insertFront(int value) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = head;
+    head = newNode;
+    printf("Inserted %d at front.\n", value);
+}
+
+// Function to display SLL and count nodes
+void displayList() {
+    struct Node *temp = head;
+    int count = 0;
+
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    printf("Singly Linked List elements:\n");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+        count++;
+    }
+    printf("NULL\nTotal number of nodes = %d\n", count);
+}
+
+// Function to demonstrate stack using SLL (LIFO)
+void stackDemo() {
+    struct Node *stack = NULL;
+    int choice, value;
+
+    do {
+        printf("\n--- STACK DEMONSTRATION (using SLL) ---\n");
+        printf("1. Push\n2. Pop\n3. Display\n4. Exit Stack Demo\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: // Push
+                printf("Enter value to push: ");
+                scanf("%d", &value);
+                {
+                    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+                    newNode->data = value;
+                    newNode->next = stack;
+                    stack = newNode;
+                    printf("%d pushed onto stack.\n", value);
+                }
+                break;
+
+            case 2: // Pop
+                if (stack == NULL)
+                    printf("Stack Underflow! (Empty)\n");
+                else {
+                    struct Node *temp = stack;
+                    printf("Popped value: %d\n", stack->data);
+                    stack = stack->next;
+                    free(temp);
+                }
+                break;
+
+            case 3: // Display
+                if (stack == NULL)
+                    printf("Stack is empty.\n");
+                else {
+                    struct Node *temp = stack;
+                    printf("Stack elements (Top -> Bottom):\n");
+                    while (temp != NULL) {
+                        printf("%d -> ", temp->data);
+                        temp = temp->next;
+                    }
+                    printf("NULL\n");
+                }
+                break;
+        }
+    } while (choice != 4);
+}
+
+// Function to demonstrate queue using SLL (FIFO)
+void queueDemo() {
+    struct Node *front = NULL, *rear = NULL;
+    int choice, value;
+
+    do {
+        printf("\n--- QUEUE DEMONSTRATION (using SLL) ---\n");
+        printf("1. Enqueue\n2. Dequeue\n3. Display\n4. Exit Queue Demo\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: // Enqueue
+                printf("Enter value to enqueue: ");
+                scanf("%d", &value);
+                {
+                    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+                    newNode->data = value;
+                    newNode->next = NULL;
+
+                    if (rear == NULL)
+                        front = rear = newNode;
+                    else {
+                        rear->next = newNode;
+                        rear = newNode;
+                    }
+                    printf("%d enqueued into queue.\n", value);
+                }
+                break;
+
+            case 2: // Dequeue
+                if (front == NULL)
+                    printf("Queue Underflow! (Empty)\n");
+                else {
+                    struct Node *temp = front;
+                    printf("Dequeued value: %d\n", front->data);
+                    front = front->next;
+                    if (front == NULL)
+                        rear = NULL;
+                    free(temp);
+                }
+                break;
+
+            case 3: // Display
+                if (front == NULL)
+                    printf("Queue is empty.\n");
+                else {
+                    struct Node *temp = front;
+                    printf("Queue elements (Front -> Rear):\n");
+                    while (temp != NULL) {
+                        printf("%d -> ", temp->data);
+                        temp = temp->next;
+                    }
+                    printf("NULL\n");
+                }
+                break;
+        }
+    } while (choice != 4);
+}
+
+// Main function
+int main() {
+    int choice, value;
+
+    do {
+        printf("\n========== MENU ==========\n");
+        printf("1. Create SLL using Front Insertion\n");
+        printf("2. Display SLL and Count Nodes\n");
+        printf("3. Demonstrate Stack using SLL\n");
+        printf("4. Demonstrate Queue using SLL\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                insertFront(value);
+                break;
+
+            case 2:
+                displayList();
+                break;
+
+            case 3:
+                stackDemo();
+                break;
+
+            case 4:
+                queueDemo();
+                break;
+
+            case 5:
+                printf("Exiting program...\n");
+                break;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
