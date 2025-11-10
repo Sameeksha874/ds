@@ -1,0 +1,132 @@
+/*Design, Develop and Implement a menu driven Program in C for the following
+operations on Circular QUEUE of Characters (Array Implementation of Queue with
+maximum size MAX)
+• Insert an Element on to Circular QUEUE.
+• Delete an Element from Circular QUEUE.
+• Demonstrate Overflow and Underflow situations on Circular QUEUE
+• Display the status of Circular QUEUE.
+• Exit
+Support the program with appropriate functions for each of the above
+operations.*/
+
+#include <stdio.h>
+#define MAX 5
+
+char cq[MAX];
+int front = -1, rear = -1;
+
+// Function Prototypes
+void enqueue(char item);
+char dequeue();
+void display();
+int countElements();
+
+// Enqueue Operation
+void enqueue(char item) {
+    if ((rear + 1) % MAX == front) {
+        printf("Queue Overflow! Cannot insert '%c'\n", item);
+        return;
+    }
+
+    if (front == -1)  // Empty Queue
+        front = rear = 0;
+    else
+        rear = (rear + 1) % MAX;
+
+    cq[rear] = item;
+    printf("Inserted '%c' into Circular Queue.\n", item);
+}
+
+// Dequeue Operation
+char dequeue() {
+    if (front == -1) {
+        printf("Queue Underflow! Nothing to delete.\n");
+        return '\0';
+    }
+
+    char item = cq[front];
+
+    if (front == rear)  // Only one element left
+        front = rear = -1;
+    else
+        front = (front + 1) % MAX;
+
+    printf("Deleted '%c' from Circular Queue.\n", item);
+    return item;
+}
+
+// Display Queue Elements
+void display() {
+    if (front == -1) {
+        printf("Circular Queue is Empty!\n");
+        return;
+    }
+
+    printf("Circular Queue elements: ");
+    int i = front;
+    while (1) {
+        printf("%c ", cq[i]);
+        if (i == rear)
+            break;
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
+
+// Count Number of Elements
+int countElements() {
+    if (front == -1)
+        return 0;
+    if (rear >= front)
+        return rear - front + 1;
+    else
+        return MAX - (front - rear - 1);
+}
+
+// Main Function
+int main() {
+    int choice;
+    char item;
+
+    printf("=== Circular Queue Implementation (Characters) ===\n");
+
+    do {
+        printf("\nMENU:\n");
+        printf("1. Insert (Enqueue)\n");
+        printf("2. Delete (Dequeue)\n");
+        printf("3. Display\n");
+        printf("4. Count Elements\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter character to insert: ");
+                scanf(" %c", &item);
+                enqueue(item);
+                break;
+
+            case 2:
+                dequeue();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("Number of elements = %d\n", countElements());
+                break;
+
+            case 5:
+                printf("Exiting program...\n");
+                break;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    } while (choice != 5);
+
+    return 0;
+}
